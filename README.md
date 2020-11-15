@@ -1,2 +1,3 @@
 # OpenGL_Beginner
-feater.top-OpenGL入门系列完整代码
+食铁兽（feater.top）OpenGL入门系列完整代码
+
