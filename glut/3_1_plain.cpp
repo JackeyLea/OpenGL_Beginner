@@ -1,9 +1,15 @@
 #include <iostream>
 
-#include <GL/glu.h>
-#include <GL/freeglut.h>
+#include <GL/glut.h>
+#include <GL/gl.h>
+#include <unistd.h>
 
 using namespace std;
+
+//esc键
+#define ESCAPE 27
+
+int window;//glut窗口标识
 
 void init(){
     glClearColor(1.0f,0.0f,1.0f,0.0f);//红绿蓝alpha值
@@ -13,15 +19,9 @@ void init(){
 void display(){
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glLoadIdentity();
-    glTranslatef(0.0f,0.0f,-6.0f);//平移
+    glTranslatef(1.0f,1.0f,-6.0f);
 
     glBegin(GL_TRIANGLES);//图像绘制部分
-    glColor3f(1.0f,0.0f,0.0f);			// Set The Color To Red
-    glVertex3f(0.0f,1.0f,0.0f);//点A（x,y,z）
-    glColor3f(0.0f,1.0f,0.0f);			// Set The Color To Green
-    glVertex3f(-1.0f,-1.0f,0.0f);//点B
-    glColor3f(0.0f,0.0f,1.0f);			// Set The Color To Blue
-    glVertex3f(1.0f,-1.0f,0.0f);//点C
     glEnd();
 
     glFlush();//刷新缓冲区
@@ -37,6 +37,15 @@ void reshape(int w, int h) {
     glLoadIdentity();
 }
 
+void keyboard(unsigned char key,int x,int y){
+    usleep(100);
+
+    if(key == ESCAPE){
+        glutDestroyWindow(window);//销毁窗口
+        exit(0);
+    }
+}
+
 int main(int argc, const char * argv[]) {
     // 初始化显示模式
     glutInit(&argc, const_cast<char **>(argv));
@@ -45,11 +54,12 @@ int main(int argc, const char * argv[]) {
     // 初始化窗口
     glutInitWindowSize(500, 500);//初始界面大小
     glutInitWindowPosition(100, 100);//界面初始位置
-    glutCreateWindow(argv[0]);//创建界面，界面标题为argv[0]，即程序名称
+    window=glutCreateWindow(argv[0]);//创建界面，界面标题为argv[0]，即程序名称
 
     init();//opengl初始化
-    glutReshapeFunc(reshape);
-    glutDisplayFunc(display);//回调函数
+    glutReshapeFunc(&reshape);
+    glutDisplayFunc(&display);//回调函数
+    glutKeyboardFunc(&keyboard);//键盘回调函数
 
     // 开始主循环绘制
     glutMainLoop();
